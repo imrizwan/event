@@ -1,12 +1,19 @@
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { IData } from '../../interfaces';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Dropdown() {
+interface IDropdown {
+  data: IData[]
+  onClick?: (e: React.MouseEvent<HTMLElement>, data: IData) => void
+}
+
+const Dropdown: React.FC<IDropdown> = (props) => {
+  const { data, onClick = () => { } } = props
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -27,46 +34,25 @@ export default function Dropdown() {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
+            {
+              data.map(item => (
+                <Menu.Item key={item.id}>
+                  {({ active }) => (
+                    <div
+                      onClick={(e) => onClick(e, item)}
+                      className={classNames(
+                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                        'block px-4 py-2 text-sm'
+                      )}
+                    >
+                      {item.name}
+                    </div>
                   )}
-                >
-                  Account settings
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  Support
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="#"
-                  className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm'
-                  )}
-                >
-                  License
-                </a>
-              )}
-            </Menu.Item>
-            <Menu.Item>
+                </Menu.Item>
+              ))
+            }
+
+            {/* <Menu.Item>
               {({ active }) => (
                 <button
                   type="submit"
@@ -78,10 +64,12 @@ export default function Dropdown() {
                   Sign out
                 </button>
               )}
-            </Menu.Item>
+            </Menu.Item> */}
           </div>
         </Menu.Items>
       </Transition>
     </Menu>
   )
 }
+
+export default Dropdown
