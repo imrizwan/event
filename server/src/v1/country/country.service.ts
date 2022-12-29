@@ -1,7 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Body } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Country } from '../../database/entities/country/country.entity';
-
+import { CountryDto } from './dto/country.dto';
 @Injectable()
 export class CountryService {
   constructor(
@@ -13,13 +13,15 @@ export class CountryService {
     return this.countryRepository.find();
   }
 
-  async addCountry(country: Country) {
+  async addCountry(@Body() country: CountryDto) {
+    console.log(country)
+
     let ans = await this.countryRepository
       .createQueryBuilder()
       .insert()
       .into(Country)
       .values(country)
       .execute();
-    return ans;
+    return country;
   }
 }

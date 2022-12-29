@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { RouterModule } from "@nestjs/core"
 import { AppController } from './app.controller';
 import { CountryModule } from './v1/country/country.module';
 import { AppService } from './app.service';
@@ -7,7 +8,19 @@ import { DatabaseModule } from './database/database.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env.development' }),
-    DatabaseModule
+    DatabaseModule,
+    CountryModule,
+    RouterModule.register([
+      {
+        path: 'api/v1',
+        children: [
+          {
+            path: 'country',
+            module: CountryModule,
+          }
+        ],
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
