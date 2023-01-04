@@ -1,5 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Country } from './entities/country/country.entity';
+import { City } from './entities/city/city.entity';
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
@@ -11,7 +12,7 @@ export const databaseProviders = [
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
-        entities: [Country],
+        entities: [Country, City],
         synchronize: true,
       });
 
