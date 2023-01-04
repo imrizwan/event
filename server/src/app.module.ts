@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { RouterModule } from "@nestjs/core"
+import { RouterModule, APP_PIPE } from "@nestjs/core"
 import { AppController } from './app.controller';
 import { CountryModule } from './v1/country/country.module';
+import { CityModule } from './v1/city/city.module';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database/database.module';
+import { HttpExceptionFilter } from './common/http-exception.filter';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env.development' }),
     DatabaseModule,
     CountryModule,
+    CityModule,
     RouterModule.register([
       {
         path: 'api/v1',
@@ -17,12 +20,22 @@ import { DatabaseModule } from './database/database.module';
           {
             path: 'country',
             module: CountryModule,
+          },
+          {
+            path: 'city',
+            module: CityModule,
           }
         ],
       },
     ]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: HttpExceptionFilter,
+    },
+    AppService,
+  ],
 })
 export class AppModule { }
