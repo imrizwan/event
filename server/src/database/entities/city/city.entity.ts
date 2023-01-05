@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Country } from '../country/country.entity';
 import {
   Length,
@@ -12,7 +12,8 @@ export class City {
   name: string;
 
   @ManyToOne(type => Country, parent => parent.cities)
-  country: Country;
+  @JoinColumn({ name: 'countryId', referencedColumnName: 'id' })
+  countryId: Country;
 
   @Column({ unique: true })
   @Length(2, 2)

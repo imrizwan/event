@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
 import { City } from "../city/city.entity";
+import { Currency } from "../currency/currency.entity";
 import {
   Length,
 } from "class-validator"
@@ -15,8 +16,13 @@ export class Country {
   @Length(2, 2)
   code: string;
 
-  @OneToMany(type => City, child => child.country)
+  @OneToMany(type => City, child => child.countryId)
+  @JoinColumn({ name: 'cities', referencedColumnName: 'id' })
   cities: City[];
+
+  @ManyToMany(type => Currency, child => child.countries)
+  @JoinColumn({ name: 'currencies', referencedColumnName: 'id' })
+  currencies: Currency[];
 
   @Column({ unique: true })
   capital: string;
@@ -47,9 +53,6 @@ export class Country {
 
   @Column({ nullable: true })
   cioc: string;
-
-  @Column()
-  currencies: string;
 
   @Column()
   currencySymbol: string;

@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, HttpCode, Param, Delete, Put } from '@nestjs/common';
-import { CityService } from './city.service';
-import { City } from '../../database/entities/city/city.entity';
-import { CityDto } from './dto/city.dto';
+import { CurrencyService } from './currency.service';
+import { Currency } from '../../database/entities/currency/currency.entity';
+import { CurrencyDto } from './dto/currency.dto';
 
 @Controller()
 export class CityController {
