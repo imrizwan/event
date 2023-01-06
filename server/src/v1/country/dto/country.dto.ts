@@ -59,14 +59,6 @@ export class CountryDto {
     @IsOptional()
     cioc: string;
     @IsNotEmpty({
-        message: 'Currencies is required',
-    })
-    currencies: string;
-    @IsNotEmpty({
-        message: 'Currency symbol is required',
-    })
-    currencySymbol: string;
-    @IsNotEmpty({
         message: 'Languages is required',
     })
     languages: string;

@@ -1,70 +1,70 @@
 import { Injectable, Inject, Body, HttpStatus, HttpException } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { City } from '../../database/entities/city/city.entity';
-import { CityDto } from './dto/city.dto';
+import { Currency } from '../../database/entities/currency/currency.entity';
+import { CurrencyDto } from './dto/currency.dto';
 @Injectable()
-export class CityService {
+export class CurrencyService {
   constructor(
-    @Inject('CITY_REPOSITORY')
-    private cityRepository: Repository<City>,
+    @Inject('CURRENCY_REPOSITORY')
+    private currencyRepository: Repository<Currency>,
   ) { }
 
-  async findAll(): Promise<City[]> {
+  async findAll(): Promise<Currency[]> {
     try {
-      return this.cityRepository
-        .createQueryBuilder('city')
-        .innerJoinAndSelect('city.countryId', 'id')
-        .where("city.isDeleted = :isDeleted", { isDeleted: false })
+      return this.currencyRepository
+        .createQueryBuilder('currency')
+        // .innerJoinAndSelect('currency.countries', 'id')
+        .where("currency.isDeleted = :isDeleted", { isDeleted: false })
         .getMany();
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async findById(id: number): Promise<City> {
+  async findById(id: number): Promise<Currency> {
     try {
-      const city = await this.cityRepository
-        .createQueryBuilder('city')
-        .innerJoinAndSelect('city.countryId', 'id')
-        .where("city.id = :id", { id: id })
-        .andWhere("city.isDeleted = :isDeleted", { isDeleted: false })
+      const currency = await this.currencyRepository
+        .createQueryBuilder('currency')
+        // .innerJoinAndSelect('currency.countries', 'id')
+        .where("currency.id = :id", { id: id })
+        .andWhere("currency.isDeleted = :isDeleted", { isDeleted: false })
         .getOne();
 
-      if (!city) {
-        throw new HttpException('City not found', HttpStatus.NOT_FOUND);
+      if (!currency) {
+        throw new HttpException('Currency not found', HttpStatus.NOT_FOUND);
       }
-      return city;
+      return currency;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async deleteById(id: number): Promise<City | Error> {
+  async deleteById(id: number): Promise<Currency | Error> {
     try {
-      let city = await this.cityRepository
+      let currency = await this.currencyRepository
         .createQueryBuilder()
         .where("id = :id", { id: id })
         .getOne();
 
-      if (!city) {
-        throw new HttpException('City not found', HttpStatus.NOT_FOUND);
+      if (!currency) {
+        throw new HttpException('Currency not found', HttpStatus.NOT_FOUND);
       }
 
-      city.isDeleted = true;
-      city.deletedAt = new Date();
-      city.deletedBy = "N/A";
-      city.version = city.version + 1;
-      await this.cityRepository.save(city);
-      return city;
+      currency.isDeleted = true;
+      currency.deletedAt = new Date();
+      currency.deletedBy = "N/A";
+      currency.version = currency.version + 1;
+      await this.currencyRepository.save(currency);
+      return currency;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-  async addCity(@Body() city: CityDto) {
+  async addCurrency(@Body() currency: CurrencyDto) {
     try {
       let data = {
-        ...city,
+        ...currency,
         createdAt: new Date(),
         updatedAt: new Date(),
         isDeleted: false,
@@ -74,10 +74,10 @@ export class CityService {
         version: 1,
       }
 
-      let ans = await this.cityRepository
+      let ans = await this.currencyRepository
         .createQueryBuilder()
         .insert()
-        .into(City)
+        .into(Currency)
         .values(data)
         .execute();
       return ans;
@@ -86,30 +86,30 @@ export class CityService {
     }
   }
 
-  async updateCity(@Body() city: CityDto) {
+  async updateCurrency(@Body() currency: CurrencyDto) {
 
     try {
-      let cityExist = await this.cityRepository
+      let currencyExist = await this.currencyRepository
         .createQueryBuilder()
-        .where("id = :id", { id: city.id })
+        .where("id = :id", { id: currency.id })
         .getOne();
 
-      if (!cityExist) {
-        throw new HttpException('City not found', HttpStatus.NOT_FOUND);
+      if (!currencyExist) {
+        throw new HttpException('Currency not found', HttpStatus.NOT_FOUND);
       }
 
       let data = {
-        ...city,
+        ...currency,
         updatedAt: new Date(),
         updatedBy: "N/A",
-        version: cityExist.version + 1,
+        version: currencyExist.version + 1,
       }
 
-      let ans = await this.cityRepository
+      let ans = await this.currencyRepository
         .createQueryBuilder()
-        .update(City)
+        .update(Currency)
         .set(data)
-        .where("id = :id", { id: city.id })
+        .where("id = :id", { id: currency.id })
         .execute();
       return ans;
     } catch (error) {

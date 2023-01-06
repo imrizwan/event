@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { Country } from "../country/country.entity";
 
 @Entity()
@@ -13,7 +13,8 @@ export class Currency {
     symbol: string;
 
     @ManyToMany(type => Country, parent => parent.currencies)
-    @JoinColumn({ name: 'countries', referencedColumnName: 'id' })
+    // @JoinColumn({ name: 'countries', referencedColumnName: 'id' })
+    @JoinTable()
     countries: Country[];
 
     @CreateDateColumn()

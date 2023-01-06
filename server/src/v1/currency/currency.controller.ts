@@ -4,35 +4,35 @@ import { Currency } from '../../database/entities/currency/currency.entity';
 import { CurrencyDto } from './dto/currency.dto';
 
 @Controller()
-export class CityController {
-  constructor(private cityService: CityService) {}
+export class CurrencyController {
+  constructor(private currencyService: CurrencyService) {}
 
   @Get()
-  public async findAll(): Promise<City[]> {
-    return this.cityService.findAll();
+  public async findAll(): Promise<Currency[]> {
+    return this.currencyService.findAll();
   }
 
   @Get(':id')
-  public async findById(@Param() params): Promise<City | Error> {
+  public async findById(@Param() params): Promise<Currency | Error> {
     const { id } = params;
-    return this.cityService.findById(id);
+    return this.currencyService.findById(id);
   }
   
   @Delete(':id')
-  public async deleteById(@Param() params): Promise<City | Error> {
+  public async deleteById(@Param() params): Promise<Currency | Error> {
     const { id } = params;
-    return this.cityService.deleteById(id);
+    return this.currencyService.deleteById(id);
   }
 
   @Post()
   @HttpCode(201)
-  public async addCity(@Body() body: CityDto) {
-    return this.cityService.addCity(body);
+  public async addCurrency(@Body() body: CurrencyDto) {
+    return this.currencyService.addCurrency(body);
   }
 
   @Put()
   @HttpCode(201)
-  public async updateCity(@Body() body: CityDto) {
-    return this.cityService.updateCity(body);
+  public async updateCurrency(@Body() body: CurrencyDto) {
+    return this.currencyService.updateCurrency(body);
   }
 }

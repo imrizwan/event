@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { DatabaseModule } from '../../database/database.module';
-import { cityProviders } from './city.providers';
-import { CityService } from './city.service';
-import { CityController } from './city.controller';
+import { currencyProviders } from './currency.providers';
+import { CurrencyService } from './currency.service';
+import { CurrencyController } from './currency.controller';
 @Module({
   imports: [DatabaseModule],
-  providers: [...cityProviders, CityService],
-  exports: [CityService],
-  controllers: [CityController],
+  providers: [...currencyProviders, CurrencyService],
+  exports: [CurrencyService],
+  controllers: [CurrencyController],
 })
-export class CityModule {}
+export class CurrencyModule {}

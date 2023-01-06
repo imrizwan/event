@@ -1,10 +1,10 @@
 import { DataSource } from 'typeorm';
-import { City } from '../../database/entities/city/city.entity'
+import { Currency } from '../../database/entities/currency/currency.entity'
 
-export const cityProviders = [
+export const currencyProviders = [
   {
-    provide: 'CITY_REPOSITORY',
-    useFactory: (dataSource: DataSource) => dataSource.getRepository(City),
+    provide: 'CURRENCY_REPOSITORY',
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(Currency),
     inject: ['DATA_SOURCE'],
   },
 ];

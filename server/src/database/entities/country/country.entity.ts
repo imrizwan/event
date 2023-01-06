@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, ManyToMany, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, OneToMany, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { City } from "../city/city.entity";
 import { Currency } from "../currency/currency.entity";
 import {
@@ -21,7 +21,8 @@ export class Country {
   cities: City[];
 
   @ManyToMany(type => Currency, child => child.countries)
-  @JoinColumn({ name: 'currencies', referencedColumnName: 'id' })
+  // @JoinColumn({ name: 'currencies', referencedColumnName: 'id' })
+  @JoinTable()
   currencies: Currency[];
 
   @Column({ unique: true })
